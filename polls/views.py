@@ -21,7 +21,7 @@ def results(request, question_id):
     question = Question.objects.get(pk=question_id)
     votes_list = [int(choice.votes) for choice in choices_list]
     total_votes = sum(votes_list)
-    return render(request, "polls/results.html", {"question": question.question_text, "choices": choices_list, "total_votes": total_votes})
+    return render(request, "polls/results.html", {"question": question, "choices": choices_list, "total_votes": total_votes})
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
