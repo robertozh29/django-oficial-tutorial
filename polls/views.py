@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 
-from .models import Question
+from .models import Question, Choice
 
 
 def index(request):
@@ -14,8 +14,11 @@ def detail(request, question_id):
     return render(request, "polls/detail.html", {"question":question})
 
 def results(request, question_id):
-    response = "You're looking at the results of question %s."
-    return HttpResponse(response % question_id)
+    choices_list = Choice.objects.filter(question=question_id)
+    question = Question.objects.get(pk=question_id)
+    votes_list = [int(choice.votes) for choice in choices_list]
+    total_votes = sum(votes_list)
+    return render(request, "polls/results.html", {"question": question.question_text, "choices": choices_list, "total_votes": total_votes})
 
 def vote(request, question_id):
     return HttpResponse("You're voting on question %s." % question_id)
